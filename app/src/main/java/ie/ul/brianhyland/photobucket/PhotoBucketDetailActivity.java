@@ -1,14 +1,17 @@
 package ie.ul.brianhyland.photobucket;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +21,10 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.koushikdutta.ion.Ion;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PhotoBucketDetailActivity extends AppCompatActivity {
 
@@ -67,11 +74,44 @@ private DocumentSnapshot mDocSnapshot;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                showEditDialog();
             }
         });
     }
+
+    private void showEditDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.photobucket_dialog,null,false);
+        builder.setView(view);
+        builder.setTitle("Edit image details");
+        final TextView captionEditText = view.findViewById(R.id.dialog_caption_edittext);
+        final TextView imageUrlEditText = view.findViewById(R.id.dialog_imageUrl_edittext);
+
+        captionEditText.setText((String)mDocSnapshot.get(Constants.KEY_CAPTION));
+        imageUrlEditText.setText((String)mDocSnapshot.get(Constants.KEY_IMAGEURL));
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Map<String, Object> pb = new HashMap<>();
+
+                pb.put(Constants.KEY_CAPTION, captionEditText.getText().toString() );
+                pb.put(Constants.KEY_IMAGEURL, imageUrlEditText.getText().toString());
+                pb.put(Constants.KEY_CREATED, new Date());
+                mDocRef.update(pb);
+
+
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel,null);
+
+        builder.create().show();
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
