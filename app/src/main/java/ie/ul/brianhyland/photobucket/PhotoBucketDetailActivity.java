@@ -59,7 +59,10 @@ private DocumentSnapshot mDocSnapshot;
                 }
                 if (documentSnapshot.exists()){
                     mDocSnapshot = documentSnapshot;
-                    Ion.with(mImageView).load((String)documentSnapshot.get(Constants.KEY_IMAGEURL));
+                    String mImageUrl = (String)documentSnapshot.get(Constants.KEY_IMAGEURL);
+                    if (mImageUrl.isEmpty()) mImageUrl = randomImageUrl();
+                    Ion.with(mImageView).load(mImageUrl);
+                    //Ion.with(mImageView).load((String)documentSnapshot.get(Constants.KEY_IMAGEURL));
                     mCaptionTextView.setText((String)documentSnapshot.get(Constants.KEY_CAPTION));
 
 
