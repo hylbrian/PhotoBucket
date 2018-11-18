@@ -1,5 +1,7 @@
 package ie.ul.brianhyland.photobucket;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoBucketAdapter extends RecyclerView.Adapter<PhotoBucketAdapter.PhotoBucketViewHolder>{
+public class PhotoBucketAdapter extends RecyclerView.Adapter<PhotoBucketAdapter.PhotoBucketViewHolder> {
 
     private List<DocumentSnapshot> mPhotoBucketSnapshots = new ArrayList<>();
 
@@ -29,8 +31,8 @@ public class PhotoBucketAdapter extends RecyclerView.Adapter<PhotoBucketAdapter.
         photoBucketCollectionRef.orderBy(Constants.KEY_CREATED, Query.Direction.DESCENDING).limit(50).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                if (e != null){
-                    Log.w(Constants.TAG,"Listening failed!");
+                if (e != null) {
+                    Log.w(Constants.TAG, "Listening failed!");
                     return;
                 }
                 mPhotoBucketSnapshots = documentSnapshots.getDocuments();
@@ -44,14 +46,14 @@ public class PhotoBucketAdapter extends RecyclerView.Adapter<PhotoBucketAdapter.
     @NonNull
     @Override
     public PhotoBucketAdapter.PhotoBucketViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.photobucket_itemview, parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.photobucket_itemview, parent, false);
         return new PhotoBucketViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PhotoBucketAdapter.PhotoBucketViewHolder photoBucketViewHolder, int i) {
         DocumentSnapshot ds = mPhotoBucketSnapshots.get(i);
-        String caption = (String)ds.get(Constants.KEY_CAPTION);
+        String caption = (String) ds.get(Constants.KEY_CAPTION);
         photoBucketViewHolder.mCaptionTextView.setText(caption);
 
 
@@ -62,13 +64,38 @@ public class PhotoBucketAdapter extends RecyclerView.Adapter<PhotoBucketAdapter.
         return mPhotoBucketSnapshots.size();
     }
 
-    class PhotoBucketViewHolder extends RecyclerView.ViewHolder{
+    class PhotoBucketViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mCaptionTextView;
 
         public PhotoBucketViewHolder(@NonNull View itemView) {
             super(itemView);
             mCaptionTextView = itemView.findViewById(R.id.itemview_caption);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context c = view.getContext();
+                    Intent intent = new Intent(c,PhotoBucketDetailActivity.class);
+                    c.startActivity(intent);
+
+                }
+            });
+
+
+                    /*
+                    //DocumentSnapshot ds = mMovieQuoteSnapshot.get(getAdapterPosition());
+                    Context c = view.getContext();
+                    Intent intent = new Intent(c,PhotoBucketDetailActivity.class);
+                    //intent.putExtra(Constants.EXTRA_DOC_ID, ds.getId() );
+
+
+                    c.startActivity(intent);
+                }
+            });
+
+        }*/
         }
     }
 }
+
+
