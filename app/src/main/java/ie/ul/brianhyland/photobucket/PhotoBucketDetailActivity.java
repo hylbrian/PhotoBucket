@@ -85,7 +85,8 @@ private DocumentSnapshot mDocSnapshot;
         switch (item.getItemId()){
             case R.id.action_delete:
 
-                //TODO: delete quote and close activity
+                mDocRef.delete();
+                finish();
                 return true;
         }
 
