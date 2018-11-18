@@ -43,24 +43,6 @@ public class MainActivity extends AppCompatActivity {
         PhotoBucketAdapter photoBucketAdapter = new PhotoBucketAdapter();
         recyclerView.setAdapter(photoBucketAdapter);
 
-        /*Temp firebase testing area
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("imageUrl")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-                */
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
