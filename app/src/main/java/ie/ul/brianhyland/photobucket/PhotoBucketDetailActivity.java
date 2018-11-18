@@ -5,14 +5,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.koushikdutta.ion.Ion;
+
 public class PhotoBucketDetailActivity extends AppCompatActivity {
 
+
+private DocumentReference mDocRef;
+private DocumentSnapshot mDocSnapshot;
     private TextView mCaptionTextView;
     private ImageView mImageView;
 
@@ -28,7 +39,29 @@ public class PhotoBucketDetailActivity extends AppCompatActivity {
 
         String docId = getIntent().getStringExtra(Constants.EXTRA_DOC_ID);
 
-        mCaptionTextView.setText(docId);
+        //mCaptionTextView.setText(docId);
+
+        mDocRef = FirebaseFirestore.getInstance().collection(Constants.COLLECTION_PATH).document(docId);
+
+        mDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if (e != null){
+                    Log.w(Constants.TAG, "lISTEN FAILED");
+                    return;
+                }
+                if (documentSnapshot.exists()){
+                    mDocSnapshot = documentSnapshot;
+                    Ion.with(mImageView).load((String)documentSnapshot.get(Constants.KEY_IMAGEURL));
+                    mCaptionTextView.setText((String)documentSnapshot.get(Constants.KEY_CAPTION));
+
+
+
+
+                }
+            }
+        });
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
