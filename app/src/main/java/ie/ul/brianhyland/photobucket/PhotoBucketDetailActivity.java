@@ -8,8 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class PhotoBucketDetailActivity extends AppCompatActivity {
+
+    private TextView mCaptionTextView;
+    private ImageView mImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +23,12 @@ public class PhotoBucketDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo_bucket_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mCaptionTextView = findViewById(R.id.detail_caption);
+        mImageView = findViewById(R.id.detail_image);
+
+        String docId = getIntent().getStringExtra(Constants.EXTRA_DOC_ID);
+
+        mCaptionTextView.setText(docId);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
