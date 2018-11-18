@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -70,23 +72,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void showAddDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.moviequote_dialog,null,false);
+        View view = getLayoutInflater().inflate(R.layout.photobucket_dialog,null,false);
         builder.setView(view);
-        builder.setTitle("Add a quote");
-        final TextView quoteEditText = view.findViewById(R.id.dialog_quote_edittext);
-        final TextView movieEditText = view.findViewById(R.id.dialog_movie_edittext);
+        builder.setTitle("Add an image");
+        final TextView captionEditText = view.findViewById(R.id.dialog_caption_edittext);
+        final TextView imageUrlEditText = view.findViewById(R.id.dialog_imageUrl_edittext);
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Map<String, Object> mq = new HashMap<>();
+                Map<String, Object> pb = new HashMap<>();
 
-                mq.put(Constants.KEY_QUOTE, quoteEditText.getText().toString() );
-                mq.put(Constants.KEY_MOVIE, movieEditText.getText().toString());
-                mq.put(Constants.KEY_CREATED, new Date());
+                pb.put(Constants.KEY_CAPTION, captionEditText.getText().toString() );
+                pb.put(Constants.KEY_IMAGEURL, imageUrlEditText.getText().toString());
+                pb.put(Constants.KEY_CREATED, new Date());
 
-                FirebaseFirestore.getInstance().collection(Constants.COLLECTION_PATH).add(mq);
+                FirebaseFirestore.getInstance().collection(Constants.COLLECTION_PATH).add(pb);
 
 
             }
